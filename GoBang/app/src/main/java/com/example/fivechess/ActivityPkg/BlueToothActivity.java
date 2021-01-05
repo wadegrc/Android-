@@ -57,6 +57,7 @@ public class BlueToothActivity extends AppCompatActivity {
         //设置向右划
         listView.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
 
+        //TODO
         List<GamePlayer> mPlayerDataList = new ArrayList<>();
         GamePlayer first = new GamePlayer();
         first.setName("工人春");

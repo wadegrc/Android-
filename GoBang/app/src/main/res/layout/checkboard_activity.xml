@@ -64,4 +64,5 @@
             fab:fab_colorPressed="@color/white"/>
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
 </RelativeLayout>

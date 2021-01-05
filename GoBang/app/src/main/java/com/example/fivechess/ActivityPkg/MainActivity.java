@@ -1,5 +1,7 @@
 package com.example.fivechess.ActivityPkg;
-
+/*
+* 菜单实现
+* */
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -26,28 +28,50 @@ public class MainActivity extends AppCompatActivity {
         fight = findViewById(R.id.fight_button);
         stand_one = findViewById(R.id.stand_alone);
 
+        addClickT();
+
+    }
+
+    void addClickT(){
         fight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, CheckBoardActivity.class);
+                fight_choose();
+            }
+        });
+
+        stand_one.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MainMachineActivity.class);
                 startActivity(intent);
             }
         });
 
     }
-
     //选择蓝牙还是联网
     private void fight_choose(){
         String [] data ={"蓝牙对战","联网对战"};//TODO 优化界面
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this,android.R.layout.simple_list_item_1,data);
+
         DialogPlus dialog = DialogPlus.newDialog(this)
                 .setContentHolder(new ListHolder())
                 .setAdapter(adapter)
                 .setOnItemClickListener(new OnItemClickListener() {
                     @Override
                     public void onItemClick(DialogPlus dialog, Object item, View view, int position) {
-
+                        switch (position) {
+                            case 0:
+                                //蓝牙
+                                Intent intent = new Intent(MainActivity.this, BlueToothActivity.class);
+                                startActivity(intent);
+                                break;
+                            case 1:
+                                //联网
+                                break;
+                        }
                     }
                 })
                 .setExpanded(true)  // This will enable the expand feature, (similar to android L share dialog)

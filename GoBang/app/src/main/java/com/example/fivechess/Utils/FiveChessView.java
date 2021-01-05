@@ -1,5 +1,6 @@
 package com.example.fivechess.Utils;
-
+/*
+* 中级 高级AI实现*/
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -180,9 +181,8 @@ public class FiveChessView extends View implements View.OnTouchListener {
     /**
      * 判断是否结束
      */
-    private void checkGameOver() {
+    private void checkGameOver(int whitchchess) {
         //获取落子的颜色(如果当前是白棋，则落子是黑棋)
-        int chess = isWhite ? BLACK_CHESS : WHITE_CHESS;
         //棋盘是否填满
         boolean isFull = true;
         //遍历chessArray
@@ -193,25 +193,25 @@ public class FiveChessView extends View implements View.OnTouchListener {
                     isFull = false;
                 }
                 //只需要判断落子是否五连即可
-                if (chessArray[i][j] == chess) {
+                if (chessArray[i][j] == whitchchess) {
                     //判断五子相连
                     if (isFiveSame(i, j)) {
                         //五子相连游戏结束
                         isGameOver = true;
                         if (callBack != null) {
                             //判断黑白棋胜利
-                            if (chess == WHITE_CHESS) {
+                            if (whitchchess == WHITE_CHESS) {
                                 whiteChessCount++;
                             } else {
                                 blackChessCount++;
                             }
                             //判断玩家/AI 胜利
-                            if (userChess == chess) {
+                            if (userChess == whitchchess) {
                                 userScore++;
                             } else {
                                 aiScore++;
                             }
-                            callBack.GameOver(chess == WHITE_CHESS ? WHITE_WIN : BLACK_WIN);
+                            callBack.GameOver(whitchchess == WHITE_CHESS ? WHITE_WIN : BLACK_WIN);
                         }
                         return;
                     }
@@ -281,8 +281,8 @@ public class FiveChessView extends View implements View.OnTouchListener {
 
     //电脑判断游戏结束
     public void checkAiGameOver() {
-        isWhite = userChess == WHITE_CHESS;
-        checkGameOver();
+
+        checkGameOver(userChess==FiveChessView.BLACK_CHESS?FiveChessView.WHITE_CHESS:FiveChessView.BLACK_CHESS);
     }
 
     @Override
@@ -305,13 +305,13 @@ public class FiveChessView extends View implements View.OnTouchListener {
                             //给数组赋值
                             chessArray[x][y] = userChess;
                             //修改当前落子颜色
-                            isWhite = userChess == WHITE_CHESS;
+
                             //修改当前为电脑执子
                             isUserBout = false;
                             //更新棋盘
                             postInvalidate();
                             //判断是否结束
-                            checkGameOver();
+                            checkGameOver(userChess);
                             //回调当前执子
                             if (callBack != null) {
                                 callBack.ChangeGamer(isWhite);
