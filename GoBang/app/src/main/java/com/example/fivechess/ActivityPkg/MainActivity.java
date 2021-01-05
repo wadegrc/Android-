@@ -1,5 +1,6 @@
 package com.example.fivechess.ActivityPkg;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -12,7 +13,6 @@ import com.example.fivechess.R;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ListHolder;
 import com.orhanobut.dialogplus.OnItemClickListener;
-import com.wang.avi.AVLoadingIndicatorView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,6 +26,13 @@ public class MainActivity extends AppCompatActivity {
         fight = findViewById(R.id.fight_button);
         stand_one = findViewById(R.id.stand_alone);
 
+        fight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CheckBoardActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 

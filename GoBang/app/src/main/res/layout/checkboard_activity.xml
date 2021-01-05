@@ -2,13 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/board_bg"
     xmlns:fab="http://schemas.android.com/apk/res-auto">
 
 <!--计时器-->
     <LinearLayout
         android:id="@+id/timerwrap"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:orientation="vertical">
 
         <TextView
@@ -23,7 +24,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
     </LinearLayout>
-<!--    菜单-->
+
+    <com.example.fivechess.Utils.FiveChessView
+        android:id="@+id/five_chess_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/timerwrap"/>
+
+    <!--    菜单-->
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/multiple_actions"
         android:layout_width="wrap_content"
