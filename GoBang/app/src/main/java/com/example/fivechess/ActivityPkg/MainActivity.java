@@ -2,6 +2,8 @@ package com.example.fivechess.ActivityPkg;
 /*
 * 菜单实现
 * */
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -16,22 +18,28 @@ import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ListHolder;
 import com.orhanobut.dialogplus.OnItemClickListener;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class MainActivity extends AppCompatActivity {
 
     private ImageButton fight;
     private ImageButton stand_one;
-
+    private ImageButton competition;
+    Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        fight = findViewById(R.id.fight_button);
-        stand_one = findViewById(R.id.stand_alone);
-
-        addClickT();
+        initView();
 
     }
-
+    void initView(){
+        fight = findViewById(R.id.fight_button);
+        stand_one = findViewById(R.id.stand_alone);
+        competition = findViewById(R.id.rank_button);
+        context = this;
+        addClickT();
+    }
     void addClickT(){
         fight.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,7 +55,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+        competition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SweetAlertDialog(context)
+                        .setTitleText("Here's a message!")
+                        .show();
+            }
+        });
     }
     //选择蓝牙还是联网
     private void fight_choose(){

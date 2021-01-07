@@ -2,31 +2,35 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/board_bg"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fab="http://schemas.android.com/apk/res-auto">
 
-<!--计时器-->
+    <!--计时器-->
     <LinearLayout
         android:id="@+id/timerwrap"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/totaltimer"
-            android:layout_width="wrap_content"
+        <com.robinhood.ticker.TickerView
+            android:id="@+id/timer"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-
-        <TextView
-            android:id="@+id/gametime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+            android:gravity="center"
+            android:padding="@dimen/activity_vertical_margin"
+            android:shadowColor="@android:color/black"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="2"
+            android:text="00:00"
+            android:textColor="?colorPrimary"
+            android:textSize="50sp"
+            app:ticker_animationDuration="500"
+            app:ticker_defaultCharacterList="number" />
     </LinearLayout>
 
-    <com.example.fivechess.Utils.FiveChessView
-        android:id="@+id/five_chess_view"
+    <com.example.fivechess.Utils.PaintChessBoard
+        android:id="@+id/go_bang_board"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/timerwrap"/>

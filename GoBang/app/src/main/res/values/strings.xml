@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">FiveChess</string>
+    <string name="Loading">搜索中..</string>
+    <string name="find">搜索</string>
+    <string name="Success">搜索成功</string>
+
+
 </resources>
