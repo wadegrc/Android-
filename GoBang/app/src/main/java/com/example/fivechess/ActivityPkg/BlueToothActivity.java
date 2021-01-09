@@ -1,10 +1,13 @@
 package com.example.fivechess.ActivityPkg;
 
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 
@@ -45,6 +48,7 @@ public class BlueToothActivity extends AppCompatActivity implements INetView {
     private ActionProcessButton btn_saomiao;
     private NetPresenter mNetPresenter;
     private int WhoIsFighter;
+    private boolean isFirst = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,18 +60,32 @@ public class BlueToothActivity extends AppCompatActivity implements INetView {
 
 
     private void init() {
+
+
         mNetPresenter = new NetPresenter(this, this, BLUE_TOOTH_MODE);
         mNetPresenter.init();
+
+        //开启地址服务
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (!isGpsEnabled) {
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 1);
+        }
+        startRequest();
         //悔棋的队列
     }
 
-    private void initView() {
+    private void startRequest(){
         mNetPresenter.startService();
-        mNetPresenter.findPeers();
+    }
+    private void rejectRequest(){mNetPresenter.stopService();}
+    private void initView() {
         //得到扫描周围蓝牙设备按钮
         btn_saomiao =  findViewById(R.id.btnSignIn);
         //扫描周围设备的ListView
         listView = findViewById(R.id.listView);
+        fight_list();
         //设备信息ArrayList
         playerlist = new ArrayList<>();
         //设备ArrayList
@@ -75,9 +93,9 @@ public class BlueToothActivity extends AppCompatActivity implements INetView {
         //显示蓝牙设备信息的adapter
         deviceshowAdapter = new BlueToothConnAdap(this, playerlist);
         listView.setAdapter(deviceshowAdapter);
+
         //绑定扫描周围蓝牙设备按钮监听器
         btn_saomiao.setOnClickListener(new SaoMiaoButtonListener());
-        fight_list();
     }
 
     private void Connect(BluetoothDevice device){
@@ -90,13 +108,7 @@ public class BlueToothActivity extends AppCompatActivity implements INetView {
                     public void onClick(SweetAlertDialog sDialog) {
                         mNetPresenter.connectToHost(device);
                         mNetPresenter.sendToDevice("FIGHT",true);
-
-                        sDialog
-                                .setTitleText("连接成功!")
-                                .setContentText("准备好了吗!")
-                                .setConfirmText("OK")
-                                .setConfirmClickListener(null)
-                                .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                        sDialog.cancel();
                     }
                 })
                 .show();
@@ -113,7 +125,10 @@ public class BlueToothActivity extends AppCompatActivity implements INetView {
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 switch (index) {
                     case 0:
+                        rejectRequest();
                         WhoIsFighter = position;
+                        Device d = playerlist.get(position);
+                        String p = devices.get(position).getAddress();
                         Connect(devices.get(position));
                         break;
                     case 1:
@@ -188,6 +203,13 @@ public class BlueToothActivity extends AppCompatActivity implements INetView {
         new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
                 .setTitleText("非常遗憾")
                 .setContentText("建立连接失败!")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        startRequest();
+                        sDialog.cancel();
+                    }
+                })
                 .show();
     }
 
@@ -197,20 +219,22 @@ public class BlueToothActivity extends AppCompatActivity implements INetView {
         for (BluetoothDevice device:
              deviceList) {
             devices.add(device);
-            Device dev = new Device(device.getName(),device.getAddress(),1);
+            Device dev = new Device(device.getName(),device.getAddress(),BluetoothDevice.BOND_BONDED);
             playerlist.add(dev);
         }
-        deviceshowAdapter.setDevices(playerlist);
-        deviceshowAdapter.notifyDataSetChanged();
+        if(isFirst){
+            deviceshowAdapter.setDevices(playerlist);
+            deviceshowAdapter.notifyDataSetChanged();
+            isFirst = false;
+        }
     }
 
     @Override
     public void onFindBlueToothPeers(List<BluetoothDevice> deviceList) {
-        Log.v("gong","test1");
         for (BluetoothDevice device:
                 deviceList) {
             devices.add(device);
-            Device dev = new Device(device.getName(),device.getAddress(),0);
+            Device dev = new Device(device.getName(),device.getAddress(),BluetoothDevice.BOND_NONE);
             playerlist.add(dev);
         }
         deviceshowAdapter.setDevices(playerlist);
@@ -226,6 +250,7 @@ public class BlueToothActivity extends AppCompatActivity implements INetView {
     * 接收到数据应做出的处理*/
     @Override
     public void onDataReceived(String o) {
+        Log.v("gong","fight");
         switch(o){
             case "REJECT":
                 new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
@@ -282,6 +307,7 @@ public class BlueToothActivity extends AppCompatActivity implements INetView {
             Log.v("gong",""+playerlist.size());
             //添加进度条
             playerlist.clear();
+            deviceshowAdapter.notifyDataSetChanged();
             mNetPresenter.findPeers();
         }
     }

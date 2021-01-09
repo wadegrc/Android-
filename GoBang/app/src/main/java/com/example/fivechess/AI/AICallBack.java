@@ -6,5 +6,5 @@ package com.example.fivechess.AI;
  */
 
 public interface AICallBack {
-    void aiAtTheBell();
+    void aiAtTheBell(int x,int y);
 }

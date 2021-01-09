@@ -8,12 +8,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fivechess.R;
+import com.example.fivechess.adapter.Listadapter;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ListHolder;
 import com.orhanobut.dialogplus.OnItemClickListener;
@@ -55,22 +55,23 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         competition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new SweetAlertDialog(context)
-                        .setTitleText("Here's a message!")
+                        .setTitleText("现在没有比赛打!")
                         .show();
             }
         });
     }
     //选择蓝牙还是联网
     private void fight_choose(){
-        String [] data ={"蓝牙对战","联网对战"};//TODO 优化界面
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                this,android.R.layout.simple_list_item_1,data);
-
+//        String [] data ={"蓝牙对战","联网对战"};//TODO 优化界面
+//
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+//                this,android.R.layout.simple_list_item_1,data);
+        Listadapter adapter = new Listadapter(this);
         DialogPlus dialog = DialogPlus.newDialog(this)
                 .setContentHolder(new ListHolder())
                 .setAdapter(adapter)
@@ -89,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 })
+                .setMargin(0, 0, 0, 0)
+                .setContentBackgroundResource(R.drawable.chessboard)
                 .setExpanded(true)  // This will enable the expand feature, (similar to android L share dialog)
                 .setGravity(Gravity.CENTER)
                 .create();

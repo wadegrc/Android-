@@ -2,7 +2,6 @@ package com.example.fivechess.adapter;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
-import android.util.Log;
 
 import com.example.fivechess.Utils.Constants;
 
@@ -85,7 +84,6 @@ public class NetPresenter implements INetInteratorCallback {
 
     @Override
     public void onFindBlueToothPeers(List<BluetoothDevice> deviceList) {
-        Log.v("gong","onFindBlueToothPeers");
         mNetView.onFindBlueToothPeers(deviceList);
     }
 

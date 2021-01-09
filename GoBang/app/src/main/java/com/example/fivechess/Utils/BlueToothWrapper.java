@@ -14,12 +14,12 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+
 
 /**
  * Created by lenov0 on 2016/2/16.
@@ -30,7 +30,8 @@ public class BlueToothWrapper {
     private Context mContext;
     private BluetoothAdapter mAdapter;
 
-    private static final UUID MY_UUID = UUID.fromString("b2a770c2-529e-4e80-933b-99dc372d3e65");
+//    private static final UUID MY_UUID = UUID.fromString("b2a770c2-529e-4e80-933b-99dc372d3e65");
+    private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private static final String APP_NAME = "GoBang";
     private DeviceDiscoveryListener mDeviceDiscoveryListener;
     private DeviceConnectListener mDeviceConnectListener;
@@ -47,7 +48,6 @@ public class BlueToothWrapper {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {//发现设备
-                Log.v("gong","ACTION_FOUND");
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 if (mDeviceDiscoveryListener != null) {
                     mDeviceDiscoveryListener.onDeviceFounded(device);
@@ -164,7 +164,6 @@ public class BlueToothWrapper {
             mDataTransferThread.cancel();
             mDataTransferThread = null;
         }
-
         if (mAcceptThread == null) {
             mAcceptThread = new AcceptThread();
             mAcceptThread.start();
@@ -201,7 +200,6 @@ public class BlueToothWrapper {
             mAcceptThread.cancel();
             mAcceptThread = null;
         }
-
         mConnectThread = new ConnectThread(device);
         mConnectThread.start();
     }
@@ -214,9 +212,11 @@ public class BlueToothWrapper {
 
     //搜索设备
     public boolean discoveryDevices(DeviceDiscoveryListener discoveryListener) {
-        Log.v("gong","discoveryDevices");
         if (mAdapter.isDiscovering()) {
             mAdapter.cancelDiscovery();
+        }
+        if(mAdapter.getState()==BluetoothAdapter.STATE_ON){
+            Log.v("gong","discoveryDevices");
         }
         mDeviceDiscoveryListener = discoveryListener;
         return mAdapter.startDiscovery();
@@ -257,10 +257,19 @@ public class BlueToothWrapper {
         public AcceptThread() {
             BluetoothServerSocket tmp = null;
             try {
-                tmp = mAdapter.listenUsingRfcommWithServiceRecord(APP_NAME, MY_UUID);
+                tmp = mAdapter.listenUsingInsecureRfcommWithServiceRecord(APP_NAME, MY_UUID);
+//                Class<?>[] args = new Class[] { int.class };
+//                Method listenMethod = mAdapter.getClass().getMethod("listenUsingRfcommOn", new Class[] { int.class });
+//                tmp = (BluetoothServerSocket) (mAdapter.getClass().getMethod
+//                        ("listenUsingRfcommOn", new Class[] { int.class }).invoke(mAdapter, new Object[] { 1 }));
+
+//                tmp = mAdapter.listenUsingEncryptedRfcommOn();
 
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+            if(tmp==null){
+                Log.v("gong","null");
             }
             mServerSocket = tmp;
         }
@@ -273,7 +282,7 @@ public class BlueToothWrapper {
             BluetoothSocket socket = null;
             try {
                 socket = mServerSocket.accept();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             if (socket != null) {
@@ -303,17 +312,17 @@ public class BlueToothWrapper {
 
         public ConnectThread(BluetoothDevice device) {
             BluetoothSocket tmp = null;
+            String name = device.getAddress();
             try {
-//                tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
-                tmp=(BluetoothSocket) device.getClass().getMethod("createRfcommSocket", new Class[] {int.class}).invoke(device,1);
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
+                tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
+//                tmp=(BluetoothSocket) device.getClass().getMethod("createRfcommSocket", new Class[] {int.class}).invoke(device,1);
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             mSocket = tmp;
+            if(mSocket.getRemoteDevice()==device){
+                Log.v("gong","equal");
+            }
         }
 
         @Override
@@ -326,6 +335,10 @@ public class BlueToothWrapper {
             }
             try {
                 mSocket.connect();
+                boolean val=mSocket.isConnected();
+                if(!val){
+                    Log.v("gong","test");
+                }
             } catch (IOException e1) {
                 e1.printStackTrace();
 

@@ -62,6 +62,8 @@ public class BlueToothConnAdap extends BaseAdapter {
         device_ifchoise = (TextView) v.findViewById(R.id.device_ifchoise);
         if (device.getBundlestate() == BluetoothDevice.BOND_BONDED) {
             device_ifchoise.setText("已配对");
+        }else{
+            device_ifchoise.setText("未配对");
         }
         return v;
     }

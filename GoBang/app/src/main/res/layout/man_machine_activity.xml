@@ -6,23 +6,16 @@
     xmlns:fancy="http://schemas.android.com/apk/res-auto"
     >
 <!--退出按钮-->
-    <mehdi.sakout.fancybuttons.FancyButton
-        android:id="@+id/btn_spotify"
+    <ImageButton
+        android:id="@+id/return_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:paddingTop="10dp"
-        fancy:fb_borderColor="#FFFFFF"
-        fancy:fb_borderWidth="1dp"
-        fancy:fb_defaultColor="#7ab800"
-        fancy:fb_focusColor="#747573"
-        fancy:fb_fontIconResource="&#xf04b;"
-        fancy:fb_iconPosition="left"
-        fancy:fb_radius="360dp"
-        fancy:fb_text=""
-        fancy:fb_textColor="#FFFFFF" />
+        android:background="@drawable/return_main"
+        />
 <!--难度选择按钮-->
     <LinearLayout
         android:layout_gravity="center"

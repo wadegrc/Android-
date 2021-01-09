@@ -1,6 +1,7 @@
 package com.example.fivechess.Utils;
 /*
 * 中级 高级AI实现*/
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,7 +15,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.fivechess.AI.Point;
 import com.example.fivechess.R;
+
+import java.util.ArrayList;
 
 public class FiveChessView extends View implements View.OnTouchListener {
 
@@ -281,7 +285,6 @@ public class FiveChessView extends View implements View.OnTouchListener {
 
     //电脑判断游戏结束
     public void checkAiGameOver() {
-
         checkGameOver(userChess==FiveChessView.BLACK_CHESS?FiveChessView.WHITE_CHESS:FiveChessView.BLACK_CHESS);
     }
 
@@ -305,7 +308,6 @@ public class FiveChessView extends View implements View.OnTouchListener {
                             //给数组赋值
                             chessArray[x][y] = userChess;
                             //修改当前落子颜色
-
                             //修改当前为电脑执子
                             isUserBout = false;
                             //更新棋盘
@@ -314,7 +316,7 @@ public class FiveChessView extends View implements View.OnTouchListener {
                             checkGameOver(userChess);
                             //回调当前执子
                             if (callBack != null) {
-                                callBack.ChangeGamer(isWhite);
+                                callBack.ChangeGamer(isWhite,x,y);
                             }else{
                                 Log.v("test","null");
                             }
@@ -329,6 +331,12 @@ public class FiveChessView extends View implements View.OnTouchListener {
         return false;
     }
 
+    public void MoveBack(ArrayList<Point>list){
+        for(Point p:list){
+            chessArray[p.x][p.y]=Constants.CHESS_NONE;
+        }
+        postInvalidate();
+    }
     public void setCallBack(GameCallBack callBack) {
         this.callBack = callBack;
     }

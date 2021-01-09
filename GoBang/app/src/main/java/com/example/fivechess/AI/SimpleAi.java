@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class SimpleAi implements Runnable {
+public class SimpleAi extends AI implements Runnable {
     //棋盘信息
     private int[][] chessArray;
     //电脑执子（默认黑子）
@@ -110,10 +110,11 @@ public class SimpleAi implements Runnable {
         }
         //落子，并将结果回调
         chessArray[max.getX()][max.getY()] = aiChess;
-        callBack.aiAtTheBell();
+        callBack.aiAtTheBell(max.getX(),max.getY());
     }
 
     public void setAiChess(int aiChess) {
+
         this.aiChess = aiChess;
     }
 

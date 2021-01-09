@@ -32,4 +32,7 @@ public class OperationQueue {
             return null;
         }
     }
+    public int size(){
+        return mOperations.size();
+    }
 }
