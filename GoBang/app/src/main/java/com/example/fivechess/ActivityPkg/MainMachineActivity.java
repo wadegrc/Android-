@@ -21,6 +21,7 @@ public class MainMachineActivity extends AppCompatActivity {
         setContentView(R.layout.man_machine_activity);
         initview();
         addListen();
+
     }
 
     private void initview(){

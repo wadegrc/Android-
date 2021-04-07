@@ -24,8 +24,11 @@ import com.example.fivechess.Utils.FiveChessView;
 import com.example.fivechess.Utils.GameCallBack;
 import com.example.fivechess.Utils.OperationQueue;
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.robinhood.ticker.TickerView;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -38,6 +41,13 @@ public class CheckBoardActivity extends AppCompatActivity implements  View.OnCli
     private FloatingActionButton moveback;
     //PopUpWindow选择玩家执子
     private PopupWindow chooseChess;
+    private int time  = 0;
+    private int my_time = 20;
+    private TickerView total_timer;
+    private TickerView my_timer;
+    private Timer ttimer;
+    private Timer timer;
+    private FloatingActionButton reset;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.checkboard_activity);
@@ -74,12 +84,18 @@ public class CheckBoardActivity extends AppCompatActivity implements  View.OnCli
         switch (winner) {
             case FiveChessView.BLACK_WIN:
                 showToast("黑棋胜利！");
+                ttimer.cancel();
+                timer.cancel();
                 break;
             case FiveChessView.NO_WIN:
                 showToast("平局！");
+                ttimer.cancel();
+                timer.cancel();
                 break;
             case FiveChessView.WHITE_WIN:
                 showToast("白棋胜利！");
+                ttimer.cancel();
+                timer.cancel();
                 break;
         }
     }
@@ -91,10 +107,25 @@ public class CheckBoardActivity extends AppCompatActivity implements  View.OnCli
         medium = new MediumAi(fiveChessView.getChessArray(), this);
         mOperationQueue = new OperationQueue();
         moveback = findViewById(R.id.action_a);
+        reset = findViewById(R.id.action_b);
+        total_timer = findViewById(R.id.mtotal_timer);
+        my_timer = findViewById(R.id.mmytimer);
+        total_timer.setPreferredScrollingDirection(TickerView.ScrollingDirection.DOWN);
+        my_timer.setPreferredScrollingDirection(TickerView.ScrollingDirection.UP);
+
         moveback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 doMoveBack();
+            }
+        });
+
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fiveChessView.resetGame();
+                my_time = 20;
+                time = 0;
             }
         });
 
@@ -119,8 +150,10 @@ public class CheckBoardActivity extends AppCompatActivity implements  View.OnCli
     @Override
     public void ChangeGamer(boolean isWhite,int x,int y) {
         //ai回合
-        Point p = new Point(x,y);
-        mOperationQueue.addOperation(p);
+        if(x!=0&&y!=0){
+            Point p = new Point(x,y);
+            mOperationQueue.addOperation(p);
+        }
         ai.updateArray(fiveChessView.getChessArray());
         ai.aiBout();
         //更改当前落子
@@ -176,6 +209,15 @@ public class CheckBoardActivity extends AppCompatActivity implements  View.OnCli
             ai.setAiChess(FiveChessView.WHITE_CHESS);
             ai.aiBout();
         }
+//        //我的倒计时开始
+//        timer = new Timer();
+//        mmy_time myTask = new mmy_time();
+//        timer.schedule(myTask, 1000, 1000);
+
+        //总计时器开启
+        ttimer = new Timer();
+        total_time Task = new total_time();
+        ttimer.schedule(Task, 1000, 1000);
     }
     @Override
     public void onClick(View v) {
@@ -189,6 +231,34 @@ public class CheckBoardActivity extends AppCompatActivity implements  View.OnCli
                 chooseChess.dismiss();
                 break;
 
+        }
+    }
+
+    private class mmy_time extends TimerTask {
+        @Override
+        public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if(my_time==0){
+                        ChangeGamer(true,0,0);
+                    }
+                    my_time--;
+                    my_timer.setText(String.format("%02d:%02d", my_time / 60 % 60,my_time % 60));
+                }
+            });
+        }
+    }
+    private class total_time extends TimerTask {
+        @Override
+        public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    time++;
+                    total_timer.setText(String.format("%02d:%02d", time / 60 % 60,time % 60));
+                }
+            });
         }
     }
 }

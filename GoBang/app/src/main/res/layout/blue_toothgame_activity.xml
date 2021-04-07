@@ -3,20 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:fab="http://schemas.android.com/apk/res-auto">
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/board_bg">
 
     <!--计时器-->
     <LinearLayout
         android:id="@+id/timerwrap"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="vertical">
+        android:layout_height="60dp">
 
         <com.robinhood.ticker.TickerView
-            android:id="@+id/timer"
-            android:layout_width="match_parent"
+            android:id="@+id/total_timer"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="left"
             android:padding="@dimen/activity_vertical_margin"
             android:shadowColor="@android:color/black"
             android:shadowDx="1"
@@ -24,9 +24,25 @@
             android:shadowRadius="2"
             android:text="00:00"
             android:textColor="?colorPrimary"
-            android:textSize="50sp"
+            android:textSize="30sp"
             app:ticker_animationDuration="500"
             app:ticker_defaultCharacterList="number" />
+
+<!--        <com.robinhood.ticker.TickerView-->
+<!--            android:id="@+id/mytimer"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:gravity="right"-->
+<!--            android:padding="@dimen/activity_vertical_margin"-->
+<!--            android:shadowColor="@android:color/black"-->
+<!--            android:shadowDx="1"-->
+<!--            android:shadowDy="1"-->
+<!--            android:shadowRadius="2"-->
+<!--            android:text="00:00"-->
+<!--            android:textColor="?colorPrimary"-->
+<!--            android:textSize="30sp"-->
+<!--            app:ticker_animationDuration="500"-->
+<!--            app:ticker_defaultCharacterList="number" />-->
     </LinearLayout>
 
     <com.example.fivechess.Utils.PaintChessBoard
@@ -53,18 +69,20 @@
         android:layout_marginEnd="16dp">
         <!--        fab:fab_labelStyle="@style/menu_labels_style"-->
         <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/action_a"
+            android:id="@+id/action_a1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/white"
             fab:fab_title="Action A"
+            fab:fab_icon="@drawable/huiqi"
             fab:fab_colorPressed="@color/white"/>
 
         <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/action_b"
+            android:id="@+id/action_b2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/white"
+            fab:fab_icon="@drawable/chonglai"
             fab:fab_title="Action with a very long name that won\'t fit on the screen"
             fab:fab_colorPressed="@color/white"/>
 

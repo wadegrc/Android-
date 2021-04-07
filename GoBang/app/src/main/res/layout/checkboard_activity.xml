@@ -3,26 +3,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/board_bg"
-    xmlns:fab="http://schemas.android.com/apk/res-auto">
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<!--计时器-->
+    <!--计时器-->
     <LinearLayout
         android:id="@+id/timerwrap"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="vertical">
+        android:layout_height="60dp">
 
-        <TextView
-            android:id="@+id/totaltimer"
+        <com.robinhood.ticker.TickerView
+            android:id="@+id/mtotal_timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+            android:gravity="left"
+            android:padding="@dimen/activity_vertical_margin"
+            android:shadowColor="@android:color/black"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="2"
+            android:text="00:00"
+            android:textColor="?colorPrimary"
+            android:textSize="30sp"
+            app:ticker_animationDuration="500"
+            app:ticker_defaultCharacterList="number" />
 
-        <TextView
-            android:id="@+id/gametime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+        <com.robinhood.ticker.TickerView
+        android:id="@+id/mmytimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:padding="@dimen/activity_vertical_margin"
+        android:shadowColor="@android:color/black"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
+        android:text="00:00"
+        android:textColor="?colorPrimary"
+        android:textSize="30sp"
+        app:ticker_animationDuration="500"
+        app:ticker_defaultCharacterList="number" />
     </LinearLayout>
 
     <com.example.fivechess.Utils.FiveChessView
@@ -43,7 +63,6 @@
         fab:fab_addButtonColorNormal="@color/white"
         fab:fab_addButtonColorPressed="@color/white"
         fab:fab_addButtonPlusIconColor="@color/black"
-
         android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginEnd="16dp">
@@ -65,6 +84,7 @@
             fab:fab_icon="@drawable/chonglai"
             fab:fab_title="Action with a very long name that won\'t fit on the screen"
             fab:fab_colorPressed="@color/white"/>
+
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 

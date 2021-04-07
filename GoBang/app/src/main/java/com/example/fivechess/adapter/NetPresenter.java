@@ -3,6 +3,7 @@ package com.example.fivechess.adapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 
+import com.example.fivechess.Utils.BlueToothWrapper;
 import com.example.fivechess.Utils.Constants;
 
 import java.util.List;
@@ -96,6 +97,26 @@ public class NetPresenter implements INetInteratorCallback {
     public void onDataReceived(String o) {
         mNetView.onDataReceived(o);
     }
+
+    @Override
+    public void getWrapper(BlueToothWrapper wrapper) {
+        mNetView.getWrapper(wrapper);
+    }
+
+    @Override
+    public void takeWrapper() {
+        mNetInteractor.takeWrapper();
+    }
+
+//    @Override
+//    public void getSocket(BluetoothSocket socket) {
+//        mNetView.getSocket(socket);
+//    }
+//
+//    @Override
+//    public void takeSocket() {
+//        mNetInteractor.takeSocket();
+//    }
 
     @Override
     public void onSendMessageFailed() {

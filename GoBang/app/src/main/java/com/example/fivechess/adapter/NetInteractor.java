@@ -15,7 +15,7 @@ public class NetInteractor {
     public void unInit() {
 
     }
-
+    public void takeWrapper(){};
     public void startNetService() {
 
     }

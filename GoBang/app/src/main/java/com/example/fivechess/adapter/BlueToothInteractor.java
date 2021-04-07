@@ -99,6 +99,15 @@ public class BlueToothInteractor extends NetInteractor {
         }
     }
 
+    @Override
+    public void takeWrapper() {
+        mCallback.getWrapper(mBlueToothWrapper);
+    }
+    //获得连接好的socket
+//    public void takeSocket(){
+//        mCallback.getSocket(mBlueToothWrapper.getSocket());
+//    }
+
     public void connectToHost(BluetoothDevice blueToothHost) {
         mBlueToothWrapper.connectToDevice(blueToothHost);
     }

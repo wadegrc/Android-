@@ -11,6 +11,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
 
+import com.example.fivechess.ActivityPkg.BlueToothGame;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -40,8 +42,9 @@ public class BlueToothWrapper {
     private AcceptThread mAcceptThread = null;
     private ConnectThread mConnectThread = null;
     private DataTransferThread mDataTransferThread = null;
-
-
+    private BluetoothSocket bsocket = null;
+    private String mData = null;
+    private BlueToothGame mGame;
     //监听器
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -77,6 +80,9 @@ public class BlueToothWrapper {
         void onDataReceived(String data);
     }
 
+    public void setGameActivity(BlueToothGame game){
+        mGame = game;
+    }
     //上下文
     public BlueToothWrapper(Context context) {
         mContext = context;
@@ -239,10 +245,14 @@ public class BlueToothWrapper {
                 });
             }
         }
+        bsocket = socket;
         mDataTransferThread = new DataTransferThread(socket);
         mDataTransferThread.start();
     }
 
+    public BluetoothSocket getSocket(){
+        return bsocket;
+    }
     //发送数据
     public void sendData(String data) {
         if (mDataTransferThread != null) {

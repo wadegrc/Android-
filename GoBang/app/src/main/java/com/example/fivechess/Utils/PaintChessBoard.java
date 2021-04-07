@@ -8,11 +8,15 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import com.example.fivechess.AI.Point;
 import com.example.fivechess.R;
+
+import java.util.ArrayList;
 
 public class PaintChessBoard extends View {
 
@@ -71,6 +75,8 @@ public class PaintChessBoard extends View {
     }
 
     public boolean putChess(boolean isWhite, int x, int y) {
+
+
         if (chessArray[x][y] != Constants.CHESS_NONE) {
             return false;
         }
@@ -81,10 +87,16 @@ public class PaintChessBoard extends View {
             chessArray[x][y] = Constants.CHESS_BLACK;
         }
         mPutChessListener.onPutChess(chessArray, x, y);
-        invalidate();
+        postInvalidate();
         return true;
     }
-
+    public Point convertPoint(float x, float y) {
+        int i = (int) (Math.rint((x - (offset)) / preWidth));
+        int j = (int) (Math.rint((y - (offset+4*preWidth)) / preWidth));
+        Log.v("test",i+":"+j);
+        Point point = new Point(i,j);
+        return point;
+    }
     /**
      * 重新测量宽高，确保宽高一样
      */
@@ -161,6 +173,22 @@ public class PaintChessBoard extends View {
         }
 
 
+    }
+    public void RegretOnce(ArrayList<Point>list){
+        for(Point p:list){
+            chessArray[p.x][p.y]=Constants.CHESS_NONE;
+        }
+        postInvalidate();
+    }
+    public void resetGame() {
+        //重置棋盘状态
+        for (int i = 0; i < GRID_NUMBER; i++) {
+            for (int j = 0; j < GRID_NUMBER; j++) {
+                chessArray[i][j] = 0;
+            }
+        }
+        //更新UI
+        postInvalidate();
     }
 
     public interface PutChessListener {

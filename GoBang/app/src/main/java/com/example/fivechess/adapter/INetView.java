@@ -2,6 +2,8 @@ package com.example.fivechess.adapter;
 
 import android.bluetooth.BluetoothDevice;
 
+import com.example.fivechess.Utils.BlueToothWrapper;
+
 import java.util.List;
 
 /**
@@ -14,7 +16,7 @@ public interface INetView {
 
     void onBlueToothDeviceConnectFailed();
 
-
+    void getWrapper(BlueToothWrapper wrapper);
 
     void onGetPairedToothPeers(List<BluetoothDevice> deviceList);
 

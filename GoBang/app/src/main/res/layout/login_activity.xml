@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/board_bg">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+
+        android:textSize="35dp"
+        android:text="登陆界面" />
+
+    <ImageView
+        android:layout_width="222dp"
+        android:layout_height="188dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/denglu_icon" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="50dp"
+            android:text="账号："
+            android:textSize="28dp" />
+
+        <EditText
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/input_user_text"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="5dp"
+            android:maxLines="1"
+            android:textSize="28dp"
+            android:hint="请输入账号"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:text="密码："
+            android:textSize="28dp" />
+
+        <EditText
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/input_key_text"
+            android:layout_marginLeft="5dp"
+            android:maxLines="1"
+            android:textSize="28dp"
+            android:hint="你的密码"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkbox_text"
+            android:orientation="vertical"
+            android:layout_marginLeft="45dp"
+            android:checked="false"
+            android:textSize="20dp"
+            android:text="是否记住密码"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/denglu_button"
+            android:layout_width="127dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/denglu_button_icon"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:textSize="30dp" />
+
+        <ImageButton
+            android:id="@+id/zhuce_button"
+            android:layout_width="139dp"
+            android:layout_height="49dp"
+            android:layout_marginLeft="40dp"
+            android:background="@drawable/zhuce_button_icon"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:textSize="30dp" />
+
+    </LinearLayout>
+</LinearLayout>

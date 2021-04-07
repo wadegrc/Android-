@@ -2,6 +2,8 @@ package com.example.fivechess.adapter;
 
 import android.bluetooth.BluetoothDevice;
 
+import com.example.fivechess.Utils.BlueToothWrapper;
+
 import java.util.List;
 
 /**
@@ -25,6 +27,7 @@ public interface INetInteratorCallback {
     void onPeersNotFound();
 
     void onDataReceived(String o);
-
+    void getWrapper(BlueToothWrapper wrapper);
+    void takeWrapper();
     void onSendMessageFailed();
 }

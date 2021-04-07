@@ -25,7 +25,7 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true">
         <ImageButton
-            android:id="@+id/low"
+            android:id="@+id/medium"
             android:textSize="15sp"
             android:textStyle="bold"
             android:background="@drawable/low_diff"
@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"/>
         <ImageButton
-            android:id="@+id/medium"
+            android:id="@+id/low"
             android:textSize="15sp"
             android:textStyle="bold"
             android:background="@drawable/medium_diff"

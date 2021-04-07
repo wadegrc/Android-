@@ -82,6 +82,7 @@ public class SimpleAi extends AI implements Runnable {
         //清空pointList
         pointList.clear();
         int blankCount = 0;
+        //获取每个可下的点的评分也就是优先级
         for (int i = 0; i < panelLength; i++)
             for (int j = 0; j < panelLength; j++) {
                 if (chessArray[i][j] == FiveChessView.NO_CHESS) {

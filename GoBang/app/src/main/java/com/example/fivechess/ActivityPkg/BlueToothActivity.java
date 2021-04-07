@@ -1,8 +1,10 @@
 package com.example.fivechess.ActivityPkg;
 
 import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.LocationManager;
@@ -18,9 +20,12 @@ import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.dd.processbutton.iml.ActionProcessButton;
+import com.example.fivechess.AI.Point;
 import com.example.fivechess.R;
+import com.example.fivechess.Utils.BlueToothWrapper;
 import com.example.fivechess.Utils.Device;
 import com.example.fivechess.Utils.ToastUtil;
+import com.example.fivechess.adapter.BlueSocketWrapper;
 import com.example.fivechess.adapter.BlueToothConnAdap;
 import com.example.fivechess.adapter.INetView;
 import com.example.fivechess.adapter.NetPresenter;
@@ -49,6 +54,11 @@ public class BlueToothActivity extends AppCompatActivity implements INetView {
     private NetPresenter mNetPresenter;
     private int WhoIsFighter;
     private boolean isFirst = true;
+    private boolean isHost =false;
+    private BlueToothWrapper wrapper;
+    private BlueSocketWrapper swrapper;
+    final String key = "GONG_REN_CHUN";
+    private BroadcastReceiver receiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +85,9 @@ public class BlueToothActivity extends AppCompatActivity implements INetView {
         startRequest();
         //悔棋的队列
     }
-
+    private void sendMessage(String message) {
+        mNetPresenter.sendToDevice(message, true);
+    }
     private void startRequest(){
         mNetPresenter.startService();
     }
@@ -93,9 +105,18 @@ public class BlueToothActivity extends AppCompatActivity implements INetView {
         //显示蓝牙设备信息的adapter
         deviceshowAdapter = new BlueToothConnAdap(this, playerlist);
         listView.setAdapter(deviceshowAdapter);
-
+        swrapper = new BlueSocketWrapper();
         //绑定扫描周围蓝牙设备按钮监听器
         btn_saomiao.setOnClickListener(new SaoMiaoButtonListener());
+
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                sendMessage(intent.getStringExtra("send"));
+            }
+        };
+        IntentFilter filter = new IntentFilter("FENG_YE_BING");
+        registerReceiver(receiver, filter);
     }
 
     private void Connect(BluetoothDevice device){
@@ -107,7 +128,7 @@ public class BlueToothActivity extends AppCompatActivity implements INetView {
                     @Override
                     public void onClick(SweetAlertDialog sDialog) {
                         mNetPresenter.connectToHost(device);
-                        mNetPresenter.sendToDevice("FIGHT",true);
+                        isHost = true;
                         sDialog.cancel();
                     }
                 })
@@ -127,8 +148,6 @@ public class BlueToothActivity extends AppCompatActivity implements INetView {
                     case 0:
                         rejectRequest();
                         WhoIsFighter = position;
-                        Device d = playerlist.get(position);
-                        String p = devices.get(position).getAddress();
                         Connect(devices.get(position));
                         break;
                     case 1:
@@ -196,7 +215,12 @@ public class BlueToothActivity extends AppCompatActivity implements INetView {
     //蓝牙连接成功 TODO
     @Override
     public void onBlueToothDeviceConnected() {
+
         ToastUtil.showShort(this, "蓝牙连接成功");
+        if(isHost){
+            mNetPresenter.sendToDevice("FIGHT",true);
+        }
+        mNetPresenter.takeWrapper();
     }
     @Override
     public void onBlueToothDeviceConnectFailed() {
@@ -212,6 +236,12 @@ public class BlueToothActivity extends AppCompatActivity implements INetView {
                 })
                 .show();
     }
+
+    @Override
+    public void getWrapper(BlueToothWrapper wrapper) {
+        swrapper.setWrapper(wrapper);
+    }
+
 
     @Override
     public void onGetPairedToothPeers(List<BluetoothDevice> deviceList) {
@@ -246,6 +276,7 @@ public class BlueToothActivity extends AppCompatActivity implements INetView {
 
     }
 
+
     /*
     * 接收到数据应做出的处理*/
     @Override
@@ -259,14 +290,21 @@ public class BlueToothActivity extends AppCompatActivity implements INetView {
                         .show();
                 break;
             case "ACCEPT":
+                ((BlueSocketWrapper)getApplication()).setHost(true);
+
                 Intent intent = new Intent(BlueToothActivity.this,BlueToothGame.class);
-                intent.putExtra("competitor",WhoIsFighter);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("isHost",true);
+                intent.putExtras(bundle);
                 startActivity(intent);
                 break;
             case "FIGHT":
                 receiveChall();
                 break;
             default:
+                Intent intent1 = new Intent(key);
+                intent1.putExtra("receive", o);
+                sendBroadcast(intent1);
                 break;
         }
     }
@@ -281,12 +319,20 @@ public class BlueToothActivity extends AppCompatActivity implements INetView {
                     @Override
                     public void onClick(SweetAlertDialog sDialog) {
                         mNetPresenter.sendToDevice("ACCEPT",false);
+                        ((BlueSocketWrapper)getApplication()).setHost(false);
+                        Intent intent = new Intent(BlueToothActivity.this,BlueToothGame.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean("isHost",false);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                        sDialog.cancel();
                     }
                 })
                 .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sDialog) {
                         mNetPresenter.sendToDevice("REJECT",false);
+                        sDialog.cancel();
                     }
                 })
                 .show();
@@ -319,4 +365,12 @@ public class BlueToothActivity extends AppCompatActivity implements INetView {
         super.onDestroy();
         unInit();
     }
+
+//    public static class MyReceive extends BroadcastReceiver {
+//
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            sendMessage(intent.getStringExtra("send"));
+//        }
+//    }
 }
